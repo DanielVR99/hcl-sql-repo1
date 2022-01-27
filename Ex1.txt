@@ -1,0 +1,114 @@
+CREATE DATABASE testDB;
+USE testDB;
+CREATE TABLE testTable (
+	dogName varchar(50) NOT NULL,
+	dogBreed varchar(50),
+	dogID int NOT NULL,
+	PRIMARY KEY (dogID)
+);
+
+DROP TABLE testTable;
+DROP DATABASE testDB;
+
+CREATE DATABASE HclCourses;
+USE HclCourses;
+CREATE TABLE Student(
+	studentId int NOT NULL,
+	studentName varchar(100) NOT NULL
+);
+CREATE TABLE Course(
+	courseId int NOT NULL,
+	courseName varchar(100) NOT NULL
+);
+CREATE TABLE Enrollment(
+	studentId int NOT NULL,
+	courseId int NOT NULL
+);
+ALTER TABLE Student
+ADD CONSTRAINT studentId UNIQUE (studentId);
+ALTER TABLE Student
+ADD CONSTRAINT studentId PRIMARY KEY (studentId);
+ALTER TABLE Course
+ADD CONSTRAINT courseId UNIQUE (courseId);
+ALTER TABLE Course
+ADD CONSTRAINT courseId PRIMARY KEY (courseId);
+ALTER TABLE Enrollment
+ADD CONSTRAINT studentId
+FOREIGN KEY (studentId) REFERENCES Student(studentID);
+ALTER TABLE Enrollment
+ADD CONSTRAINT courseId
+FOREIGN KEY (courseId) REFERENCES Course(courseId);
+INSERT INTO Student VALUES
+(	
+	1,
+	'Daniel'
+),
+(	
+	2,
+	'Fredy'
+),
+(	
+	3,
+	'Daniela'
+);
+INSERT INTO Course VALUES
+(	
+	1,
+	'Java'
+),
+(	
+	2,
+	'Git'
+),
+(	
+	3,
+	'React'
+),
+(	
+	4,
+	'Spring'
+),
+(	
+	5,
+	'C++'
+),
+(	
+	6,
+	'Javascript'
+);
+INSERT INTO Enrollement VALUES
+(	
+	1,
+	1
+),
+(	
+	2,
+	1
+),
+(	
+	3,
+	3
+),
+(	
+	1,
+	4
+),
+(	
+	2,
+	6
+);
+DELETE FROM Course WHERE courseId = 6; /*Cannot delete or update a parent row: a foreign key constraint falis*/
+DELETE FROM Course WHERE courseId = 5;
+SELECT * FROM student;
+SELECT Course.courseName, count(Enrollment.studentId) AS 'Number of students'
+FROM Course
+INNER JOIN Enrollment
+ON Enrollment.courseId = Course.courseId
+GROUP BY Course.courseName;
+SELECT Course.courseName AS 'Course with the maximum number of enrollments'
+FROM Course
+INNER JOIN Enrollment
+ON Enrollment.courseId = Course.courseId
+GROUP BY Course.courseName
+ORDER BY COUNT(Enrollment.studentId) DESC
+LIMIT 1;
